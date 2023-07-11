@@ -1,5 +1,5 @@
 %% Learning and the size of the Government Spending Multiplier
-% © 2017 Ewoud Quaghebeur
+% Â© 2017 Ewoud Quaghebeur
 
 %% Parameters
 alpha = 1/3;                % Output elasticity with respect to capital
@@ -25,7 +25,7 @@ mc_ss=(eps-1)/eps;          % steady state marginal cost
 ky=mc_ss*alpha/rk_ss;
 iy=delta*ky; % I/Y ratio ! different than without imperfect competition
 cy=1-gy-iy;                 % C/Y ratio
-n_ss=1/3;                   % Steady state labor
+n_ss=1/3;                   % Steady state labour
 wy_ss = ((1-alpha)*(eps-1))/(eps*n_ss);  % steady-state wage rate
 by = 0.74;                  % Steady state debt to gdp ratio
 phi = cy/(wy_ss*(1-n_ss)+cy); % Preference parameter
@@ -43,11 +43,11 @@ constant=0;
 gain=0.02;
 
 %% Programme settings
-draw=0;         % Switch to draw additional figures (0 = no figures)
-T=40;           % Number of periods for impulse response plots
-S=10000;        % Number of simulation periods
-itermax=10000;  % RPE: maximum number of iterations
-damp=.9;        % RPE: damping factor
+draw=0;
+T=40;
+S=10000;
+itermax=10000;
+damp=.9;
 
 %% Neoclassical model
 NeoClassicalResults=NeoClassical(parameters,{'eg'},sigmag,sigmaz,T,S,draw,itermax,damp,constant,gain);
@@ -197,7 +197,7 @@ hLegend = legend('Rational Expectations','Adaptive Learning','Location','southea
 
 %%% Create tables
 RowNames={['theta=' num2str(thetas(1))],['theta=' num2str(thetas(2))],...
-    ['theta=' num2str(thetas(3))],['theta=' num2str(thetas(4))]};
+    ['theta=' num2str(thetas(3))],['theta=0.85' num2str(thetas(4))]};
 VariableNames={'RatExp','Learning'};
 Figure4OutputMultiplier=array2table(Figure4OutputMultiplier,...
     "RowNames",RowNames,"VariableNames",VariableNames);
@@ -220,7 +220,7 @@ ky2=mc_ss*alpha/rk_ss2;
 iy2=delta*ky2; % I/Y ratio
 cy2=1-gy-iy2;  % C/Y ratio
 
-% Preference parameter, adjusted because of labor tax
+% Preference parameter, adjusted because of labour tax
 phi2 = cy2*(1-tauw)^(-1)*(1+tauc)/(wy_ss*(1-n_ss)+cy2*(1+tauc)/(1-tauw));
 
 dy2=1-wny-rk_ss2*ky2;
@@ -236,8 +236,8 @@ Distortionary1Results=DistortionaryTaxes(parameters_dist,{'eg'},sigmag,sigmaz,si
 loc_g=find(strcmp(Distortionary1Results.REE_IRF_eg.names,'g'));
 Distortionary1Results.tauk=gy*Distortionary1Results.REE_IRF_eg.y(:,loc_g)/(ky2*tauk*rk_ss2);
 
-%%% Labor tax financing
-financing=2; % 2=labor tax financing
+%%% Labour tax financing
+financing=2; % 2=labour tax financing
 parameters_dist(end)=financing;
 Distortionary2Results=DistortionaryTaxes(parameters_dist,{'eg'},sigmag,sigmaz,sigmar,T,S,draw,itermax,damp,constant,gain);
 
@@ -273,7 +273,7 @@ IHL_Multipliers = PVMultiplier(Distortionary1Results.IHL_eg.y(strcmp(Distortiona
     Distortionary1Results.IHL_eg.w(strcmp(Distortionary1Results.IHL_eg.names_z,'g'),:)',1/beta,gy/iy,T);
 Table4_PVMultipliers = [Table4_PVMultipliers; RE_Multipliers([1 4 4*4 4*6])' IHL_Multipliers([1 4 4*4 4*6])'];
 
-%%% Labor tax financing
+%%% Labour tax financing
 %  - Output
 RE_Multipliers = PVMultiplier(Distortionary2Results.REE_IRF_eg.y(:,strcmp(Distortionary2Results.REE_IRF_eg.names,'y')),...
     Distortionary2Results.REE_IRF_eg.y(:,strcmp(Distortionary2Results.REE_IRF_eg.names,'g')),1/beta,gy,T);
