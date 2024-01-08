@@ -2,9 +2,9 @@ function PlotIRFs(Results,figureName)
 %PlotIRFs Replication of figures with impulse responses in paper.
 %   Ewoud Quaghebeur, July 2023
 
-T=size(Results.REE_IRF_eg.y,1);
+T = size(Results.REE_IRF_eg.y,1);
 
-variablesMAT={
+variablesMAT = {
     'y'     'Output ($Y$)'
     'c'     'Consumption ($C$)'
     'i'     'Investment ($I$)'
@@ -15,7 +15,7 @@ variablesMAT={
     };
 
 figure('Name',figureName);
-for iPlot=1:7
+for iPlot = 1:7
     subplot(4,2,iPlot);
     plot(1:T,100*Results.REE_IRF_eg.y(:,strcmp(Results.REE_IRF_eg.names,variablesMAT(iPlot,1))),...
         1:T,100*Results.RL_eg.y(strcmp(Results.REE_IRF_eg.names,variablesMAT(iPlot,1)),:),'--',...
