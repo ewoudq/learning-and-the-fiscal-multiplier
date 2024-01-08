@@ -299,3 +299,85 @@ RowNames = {'Lump-sum Y','Lump-sum C','Lump-sum I','Capital tax Y',...
 Table4_PVMultipliers = array2table(Table4_PVMultipliers,'RowNames',RowNames, ...
     'VariableNames',{'RE Impact','RE 1 yr','RE 4 yrs','RE 6 yrs',...
     'AL Impact','AL 1 yr','AL 4 yrs','AL 6 yrs'});
+
+%% Figure 5. Impulse responses for different fiscal policy specifications
+% Impulse responses to an increase in government spending of 1% of GDP of
+% the new Keynesian model for different fiscal policy specifications.
+
+variablesMAT = {
+    'c'     'Consumption ($C$)'
+    'g'     'Government spending ($G$)'
+    'i'     'Investment ($I$)'
+    'k'     'Capital stock ($K$)'
+    'mc'    'Real marginal cost ($MC$)'
+    'n'     'Hours worked ($N$)'
+    'pi'    'Inflation ($\Pi$)'
+    'q'     'Tobin''s Q ($Q$)'
+    'rk'    'Rental rate of capital ($r^k$)'
+    'r'     'Nominal interest rate ($R$)'
+    't'     'Lump-sum tax ($T$)'
+    'w'     'Real wages ($W$)'
+    'y'     'Output ($Y$)'
+    'tauk'  'Capital income tax ($\tau^k$)'
+    'tauw'  'Labour income tax ($\tau^w$)'
+    };
+
+figure('Name','Impulse responses for different fiscal policy specifications');
+for iPlot = 1:size(variablesMAT,1)
+    subplot(5,3,iPlot);
+    hold on;
+    plot(1:T,zeros(T,1),'-','Color',[.5 .5 .5]);
+    % Rational expectations
+    if strcmp(variablesMAT{iPlot,1},'t')        
+        plot(1:T,NewKeynesianResults.REE_IRF_eg.y(:, ...
+            strcmp(NewKeynesianResults.REE_IRF_eg.names,variablesMAT{iPlot,1})), ...
+            'b')
+    elseif strcmp(variablesMAT{iPlot,1},'tauk')
+        plot(1:T,Distortionary1Results.tauk,'r');
+    elseif strcmp(variablesMAT{iPlot,1},'tauw')
+        plot(1:T,Distortionary2Results.tauw,'g');
+    else
+        a = plot(1:T,NewKeynesianResults.REE_IRF_eg.y(:, ...
+            strcmp(NewKeynesianResults.REE_IRF_eg.names,variablesMAT{iPlot,1})), ...
+            'b');
+        b = plot(1:T,Distortionary1Results.REE_IRF_eg.y(:, ...
+            strcmp(Distortionary1Results.REE_IRF_eg.names,variablesMAT{iPlot,1})), ...
+            'r');
+        c = plot(1:T,Distortionary2Results.REE_IRF_eg.y(:, ...
+            strcmp(Distortionary2Results.REE_IRF_eg.names,variablesMAT{iPlot,1})), ...
+            'g');
+    end
+
+    % Infinite Horizon Learning
+    if strcmp(variablesMAT{iPlot,1},'t')
+        Data = [NewKeynesianResults.IHL_eg.y; NewKeynesianResults.IHL_eg.w];
+        VarNames = [NewKeynesianResults.IHL_eg.names_xy NewKeynesianResults.IHL_eg.names_z];
+        plot(1:T,...
+            Data(strcmp(VarNames,variablesMAT{iPlot,1}),:), ...
+            '--b');
+    elseif strcmp(variablesMAT{iPlot,1},'tauk')
+        plot(1:T,Distortionary1Results.tauk,'r');
+    elseif strcmp(variablesMAT{iPlot,1},'tauw')
+        plot(1:T,Distortionary2Results.tauw,'g');
+    else
+        Data = [NewKeynesianResults.IHL_eg.y; NewKeynesianResults.IHL_eg.w];
+        VarNames = [NewKeynesianResults.IHL_eg.names_xy NewKeynesianResults.IHL_eg.names_z];
+        plot(1:T,...
+            Data(strcmp(VarNames,variablesMAT{iPlot,1}),:), ...
+            '--b');
+        Data = [Distortionary1Results.IHL_eg.y; Distortionary1Results.IHL_eg.w];
+        VarNames = [Distortionary1Results.IHL_eg.names_xy Distortionary1Results.IHL_eg.names_z];
+        plot(1:T,...
+            Data(strcmp(VarNames,variablesMAT{iPlot,1}),:), ...
+            '--r');
+        Data = [Distortionary2Results.IHL_eg.y; Distortionary2Results.IHL_eg.w];
+        VarNames = [Distortionary2Results.IHL_eg.names_xy Distortionary2Results.IHL_eg.names_z];
+        plot(1:T, ...
+            Data(strcmp(VarNames,variablesMAT{iPlot,1}),:),'--g');
+    end
+
+    hold off;
+    title(variablesMAT(iPlot,2),'interpreter','latex');    
+end
+legend([a b c],'Baseline','Capital tax financing','Labour tax financing',...
+    'Orientation','horizontal','Location','best');
